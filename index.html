@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Personas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f0f2f5;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .user-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .user-card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .user-card img {
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+    }
+    .user-card p {
+      margin: 8px 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Lista de Personas</h1>
+  <div class="user-list" id="userList"></div>
+
+  <script>
+    async function cargarUsuarios() {
+      try {
+        const response = await fetch('https://randomuser.me/api/?results=10');
+        const data = await response.json();
+        const userList = document.getElementById('userList');
+
+        data.results.forEach(user => {
+          const card = document.createElement('div');
+          card.className = 'user-card';
+          card.innerHTML = `
+            <img src="${user.picture.large}" alt="Foto de ${user.name.first}">
+            <p><strong>Nombre:</strong> ${user.name.title} ${user.name.first} ${user.name.last}</p>
+            <p><strong>Género:</strong> ${user.gender}</p>
+            <p><strong>Ubicación:</strong> ${user.location.city}, ${user.location.country}</p>
+            <p><strong>Correo:</strong> ${user.email}</p>
+            <p><strong>Nacimiento:</strong> ${user.dob.date.substring(0, 10)}</p>
+          `;
+          userList.appendChild(card);
+        });
+      } catch (error) {
+        console.error('Error al cargar usuarios:', error);
+      }
+    }
+
+    cargarUsuarios();
+  </script>
+
+</body>
+</html>
