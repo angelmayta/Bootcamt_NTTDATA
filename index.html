@@ -1,57 +1,76 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
   <title>Lista de Personas</title>
   <style>
+    /* Estilos básicos para el cuerpo de la página */
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
+      font-family: Arial, sans-serif; 
+      padding: 20px; 
       background: #f0f2f5;
     }
+    /* Estilos para el título */
     h1 {
       text-align: center;
       color: #333;
     }
+    /* Estilos para la lista de usuarios */
     .user-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      display: grid; /* Usa grid para la disposición de tarjetas */
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 3 columnas flexibles */
       gap: 20px;
       margin-top: 30px;
     }
+    /* Estilos para cada tarjeta de usuario */
     .user-card {
-      background: white;
+      background: white; 
       padding: 15px;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+      text-align: center; 
     }
+    /* Estilos para la imagen de perfil */
     .user-card img {
-      border-radius: 50%;
-      width: 100px;
-      height: 100px;
+      border-radius: 50%; 
+      width: 100px; 
+      height: 100px; 
     }
+    /* Estilos para los párrafos de cada tarjeta */
     .user-card p {
       margin: 8px 0;
       font-size: 14px;
     }
   </style>
 </head>
+
 <body>
 
+  <!-- Título de la página -->
   <h1>Lista de Personas</h1>
+
+  <!-- Contenedor donde se añadirán las tarjetas de usuario -->
   <div class="user-list" id="userList"></div>
 
   <script>
+    // Función asíncrona para cargar los usuarios desde la API
     async function cargarUsuarios() {
       try {
+        // Solicita los datos desde la API
         const response = await fetch('https://randomuser.me/api/?results=10');
+        
+        // Convierte la respuesta en formato JSON
         const data = await response.json();
+        
+        // Obtiene el contenedor donde se mostrarán las tarjetas
         const userList = document.getElementById('userList');
 
+        // Itera sobre cada usuario en la respuesta de la API
         data.results.forEach(user => {
+          // Crea un nuevo elemento "div" para cada tarjeta de usuario
           const card = document.createElement('div');
           card.className = 'user-card';
+          
+          // Añade el contenido HTML dentro de la tarjeta
           card.innerHTML = `
             <img src="${user.picture.large}" alt="Foto de ${user.name.first}">
             <p><strong>Nombre:</strong> ${user.name.title} ${user.name.first} ${user.name.last}</p>
@@ -60,13 +79,17 @@
             <p><strong>Correo:</strong> ${user.email}</p>
             <p><strong>Nacimiento:</strong> ${user.dob.date.substring(0, 10)}</p>
           `;
+          
+          // Añade la tarjeta generada al contenedor de la lista de usuarios
           userList.appendChild(card);
         });
       } catch (error) {
+        // Si ocurre un error, lo muestra en la consola
         console.error('Error al cargar usuarios:', error);
       }
     }
 
+    // Llama a la función para cargar los usuarios cuando la página cargue
     cargarUsuarios();
   </script>
 
